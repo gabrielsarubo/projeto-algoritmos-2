@@ -280,28 +280,6 @@ void buscarBilhete(FILMES *lista_filmes, BILHETES *vetor_bilhetes, int *p_cont_p
 			printf("Nenhum bilhete reservado para esse nome\n");
 		break;
 
-		case 3:
-			printf("# Voce escolheu Telefone\n");
-			printf("Digite o telefone do cliente \n");
-			scanf("%d", &tel);
-
-			//[1]
-			for(i=0; i < *qtd_bilhetes; i++){
-				if(tel ==   vetor_bilhetes[i].tel_cliente){//[2]
-					printf("Seu bilhete e:\n");
-					printf("\n# Imprimindo bilhetes que reservaram esse filme:\n\n");
-					printf("Codigo do filme: %d \n", vetor_bilhetes[i].cod_bil_filme);
-					printf("Nome do cliente: %s \n", vetor_bilhetes[i].nome_cliente);
-					printf("Telefone do cliente: %d \n", vetor_bilhetes[i].tel_cliente);
-					//[3]
-					aux = 1;
-				}
-			}
-
-			if (aux != 1)//[4]
-			printf("Nenhum bilhete reservado para esse telefone \n");
-		break;
-
 		default:
 			printf("Opcao invalida.\n");
 	}
