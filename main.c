@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #if defined (_WIN32) || defined(_WIN64)
     int isWindows = 1;
 	#else
@@ -10,24 +11,25 @@
 
 typedef struct FILMES{
     int cod_filme;
-    char titulo_filme[10];
-    char genero[10];
-    char formato[2];
-    char data[10];
-    char horario[10];
+    char titulo_filme[15];
+    char genero[15];
+    char formato[15];
+    char data[15];
+    char horario[15];
     float valor_filme;
     struct FILMES *prox;
 } FILMES;
 
 typedef struct BILHETES{
     int cod_bilhete;
-    char nome_cliente[10];
-    char rg[10];
+    char nome_cliente[15];
+    char rg[15];
     int poltrona;// só para dar continuacao ao programa por enquanto
     float preco;
     int cpcod_filme;// armazena uma copia do cod do filme
-    char cpdata[10];// armazena uma copia da data do filme
-    char cphorario[10];// armazena uma copia do horario do filme
+    char cptitulo_filme[15];// armazena uma copia do titulo do filme
+    char cpdata[15];// armazena uma copia da data do filme
+    char cphorario[15];// armazena uma copia do horario do filme
 } BILHETES;
 
 int auto_cod_filme = 1;// global, gera codigo filme automaticamente
@@ -47,12 +49,24 @@ void LimpaTela(){
 	}
 }
 
+// funcao que imprime bilhetes que recebe o vetor de Bilhetes e a posicao atual daquele bilhete
+void ImprimirBilhetes(BILHETES *vBilhetes, int pos){
+    printf("\nCodigo do bilhete: %d\n", vBilhetes[pos].cod_bilhete);
+    printf("Codigo do filme: %d\n\n", vBilhetes[pos].cpcod_filme);
+    printf("Nome do cliente: %s\n", vBilhetes[pos].nome_cliente);
+    printf("RG do cliente: %s\n\n", vBilhetes[pos].rg);
+    printf("Titulo do filme: %s\n", vBilhetes[pos].cptitulo_filme);    
+    printf("Poltrona: %d\n", vBilhetes[pos].poltrona);
+    printf("Data do filme: %s\n", vBilhetes[pos].cpdata);
+    printf("Horario do filme: %s\n\n", vBilhetes[pos].cphorario);
+    printf("Preco final: R$ %.2f\n", vBilhetes[pos].preco);
+}
+
 // funcao que reserva novos bilhetes no vetor Bilhetes
 void Reservar(BILHETES *vBilhetes, int tam_vet, FILMES *head){
     int i = cont_vBilhetes;
-    // [1] imprimir lista de filmes
-
-    // [2] popular bilhete com dados
+    // [1] imprimir lista de filmes (operacao já feita no menu principal)
+    // [2] popular bilhete com dados, entrada: teclado
     vBilhetes[i].cod_bilhete = auto_cod_bilhete;
     auto_cod_bilhete++;
     printf("Informe o codigo do filme: ");
@@ -62,31 +76,30 @@ void Reservar(BILHETES *vBilhetes, int tam_vet, FILMES *head){
     printf("Informe o RG do cliente: ");
     scanf("%s", vBilhetes[i].rg);
 
-    // [3] mostrar/escolher poltrona
+    // [2.1] popular bilhete com dados, receber a poltrona, entrada: teclado
 	printf("\nEscolha uma poltrona: ");
     scanf("%d", &vBilhetes[i].poltrona);
 
-    // [4] imprimir bilhete
-    // para ter acesso à data, etc. do filme escolhido pelo usuario, precisa-se travessar a Lista Filmes,
-    // com base no codigo do filme, à procura das informacoes e entao, imprimi-las
-    printf("\nCodigo bilhete:  %d\n", vBilhetes[i].cod_bilhete);
-    printf("Codigo filme:    %d\n", vBilhetes[i].cpcod_filme);
-    printf("Nome cliente:    %s\n", vBilhetes[i].nome_cliente);
-    printf("RG cliente:      %s\n", vBilhetes[i].rg);
-    printf("Poltrona:        %d\n", vBilhetes[i].poltrona);
-
-    // procurar pelo restantes de infomacoes com base no cod do filme, travessar a Lista Filmes
+    // [2.2] popular bilhete com copias dos dados do filme, entrada: automatico
+    // para ter acesso aos dados do filme escolhido pelo usuario, precisa-se varrer a Lista Filmes
+    // entao, armazenar uma copia de cada variavel no Vetor de Bilhetes
+    // varrer a Lista Filmes
     while(head != NULL){
         if(vBilhetes[i].cpcod_filme == head->cod_filme){
             break;// se o codigo do filme for encontrado na Lista Filmes, parar a procura
         }
         head = head->prox;
     }
-    
-    // agora, head aponta para o nó em que está o filme escolhido pelo o usuario
-    // ou seja, agora eu tenho acesso ao filme escolhido e todos os seus dados
-    printf("Titulo do filme: %s\n", head->titulo_filme);
-    printf("Genero do filme: %s\n", head->genero);
+    // agora, head aponta para o nó em que está o filme escolhido, ou seja, tenho acesso ao filme escolhido + suas variaveis
+    // fazer uma copia das variaveis de Filmes para aquele bilhete
+    strcpy(vBilhetes[i].cptitulo_filme, head->titulo_filme);
+    strcpy(vBilhetes[i].cpdata, head->data);
+    strcpy(vBilhetes[i].cphorario, head->horario);
+    vBilhetes[i].preco = head->valor_filme + 10.0;
+
+    // [3] imprimir o bilhete
+    // chamar funcao que imprime bilhetes que recebe o vetor de Bilhetes e a posicao atual daquele bilhete
+    ImprimirBilhetes(vBilhetes, i);
 
     cont_vBilhetes++;// indica o tamanho do vetor, pois toda a vez que se adiciona um bilhete, o vetor aumenta + 1
 }
@@ -125,6 +138,14 @@ void Inserir(FILMES **head){
     scanf("%s", temp->titulo_filme);
     printf("Digite o genero do filme: ");
     scanf("%s", temp->genero);
+    printf("Digite o formato do filme: ");
+    scanf("%s", temp->formato);
+    printf("Digite a data do filme (dd-mm-aaaa): ");
+    scanf("%s", temp->data);
+    printf("Digite o horario do filme: ");
+    scanf("%s", temp->horario);
+    printf("Digite o valor do filme: ");
+    scanf("%f", &temp->valor_filme);
 
     // add novo no, se a lista estiver fazia
     if(*head == NULL){
@@ -194,7 +215,11 @@ void Imprimir(FILMES *head){
     // primeio, imprimir os valores do nó
     printf("Codigo do filme: %d\n", head->cod_filme);
     printf("Titulo do filme: %s\n", head->titulo_filme);
-    printf("Genero do filme: %s\n\n", head->genero);
+    printf("Genero do filme: %s\n", head->genero);
+    printf("Formato do filme: %s\n", head->formato);
+    printf("Data do filme: %s\n", head->data);
+    printf("Horario do filme: %s\n", head->horario);
+    printf("Valor do filme: R$ %.2f\n\n", head->valor_filme);
     // chamada recursiva 
     Imprimir(head->prox);
 }
