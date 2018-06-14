@@ -12,19 +12,22 @@ typedef struct FILMES{
     int cod_filme;
     char titulo_filme[10];
     char genero[10];
-    // char formato[2];
-    // char data;
-    // char horario[10];
-    // float valor_filme;
+    char formato[2];
+    char data[10];
+    char horario[10];
+    float valor_filme;
     struct FILMES *prox;
 } FILMES;
 
 typedef struct BILHETES{
     int cod_bilhete;
-    int cpcod_filme;// armazena uma copia do cod_filme
     char nome_cliente[10];
     char rg[10];
     int poltrona;// só para dar continuacao ao programa por enquanto
+    float preco;
+    int cpcod_filme;// armazena uma copia do cod do filme
+    char cpdata[10];// armazena uma copia da data do filme
+    char cphorario[10];// armazena uma copia do horario do filme
 } BILHETES;
 
 int auto_cod_filme = 1;// global, gera codigo filme automaticamente
