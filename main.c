@@ -48,6 +48,18 @@ int auto_cod_bilhete = 1;// global, gera codigo bilhete automaticamente
 // se nunca foi adicionado, entao ele vale 1 | se ja foi adicionado, entao ele vale n
 int cont_vBilhetes = 0;// conta o tamanho do vetor bilhetes
 
+enum menu_principal{
+    ORESERVAR = 1,
+    OPESQUISAR,
+    OADICIONAR,
+    OEDITAR,
+    ODELETAR,
+    OMOSTRAR,
+    OSAIR,// OpcaoSAIR
+};
+
+int continuar = 0;// continuar se inicia como falso idicando que nao a acao nao sera continuada dentro da funcao
+
 void LimpaTela(){
 	if (isWindows == 1){
 		//limpa tela no Windows
@@ -73,158 +85,208 @@ void ImprimirBilhetes(BILHETES *vBilhetes, int pos){
 
 // funcao que reserva novos bilhetes no vetor Bilhetes
 void Reservar(BILHETES *vBilhetes, int tam_vet, FILMES *head){
-    int i = cont_vBilhetes;
-    // [1] imprimir lista de filmes (operacao já feita no menu principal)
-    // [2] popular bilhete com dados, entrada: teclado
-    vBilhetes[i].cod_bilhete = auto_cod_bilhete;
-    auto_cod_bilhete++;
-    printf("Informe o codigo do filme: ");
-    scanf("%d", &vBilhetes[i].cpcod_filme);
-    printf("Informe o nome do cliente: ");
-    scanf("%s", vBilhetes[i].nome_cliente);
-    printf("Informe o RG do cliente: ");
-    scanf("%s", vBilhetes[i].rg);
+    do{
+        int i = cont_vBilhetes;
+        // [1] imprimir lista de filmes (operacao já feita no menu principal)
+        // [2] popular bilhete com dados, entrada: teclado
+        vBilhetes[i].cod_bilhete = auto_cod_bilhete;
+        auto_cod_bilhete++;
+        printf("Informe o codigo do filme: ");
+        scanf("%d", &vBilhetes[i].cpcod_filme);
+        printf("Informe o nome do cliente: ");
+        scanf("%s", vBilhetes[i].nome_cliente);
+        printf("Informe o RG do cliente: ");
+        scanf("%s", vBilhetes[i].rg);
 
-    // [2.1] popular bilhete com dados, receber a poltrona, entrada: teclado
-	printf("\nEscolha uma poltrona: ");
-    scanf("%d", &vBilhetes[i].poltrona);
+        // [2.1] popular bilhete com dados, receber a poltrona, entrada: teclado
+        printf("\nEscolha uma poltrona: ");
+        scanf("%d", &vBilhetes[i].poltrona);
 
-    // [2.2] popular bilhete com copias dos dados do filme, entrada: automatico
-    // para ter acesso aos dados do filme escolhido pelo usuario, precisa-se varrer a Lista Filmes
-    // entao, armazenar uma copia de cada variavel no Vetor de Bilhetes
-    // varrer a Lista Filmes
-    while(head != NULL){
-        if(vBilhetes[i].cpcod_filme == head->cod_filme){
-            break;// se o codigo do filme for encontrado na Lista Filmes, parar a procura
+        // [2.2] popular bilhete com copias dos dados do filme, entrada: automatico
+        // para ter acesso aos dados do filme escolhido pelo usuario, precisa-se varrer a Lista Filmes
+        // entao, armazenar uma copia de cada variavel no Vetor de Bilhetes
+        // varrer a Lista Filmes
+        while(head != NULL){
+            if(vBilhetes[i].cpcod_filme == head->cod_filme){
+                break;// se o codigo do filme for encontrado na Lista Filmes, parar a procura
+            }
+            head = head->prox;
         }
-        head = head->prox;
+        // agora, head aponta para o nó em que está o filme escolhido, ou seja, tenho acesso ao filme escolhido + suas variaveis
+        // fazer uma copia das variaveis de Filmes para aquele bilhete
+        strcpy(vBilhetes[i].cptitulo_filme, head->titulo_filme);
+        strcpy(vBilhetes[i].cpdata, head->data);
+        strcpy(vBilhetes[i].cphorario, head->horario);
+        vBilhetes[i].preco = head->valor_filme + 10.0;
+
+        // [3] imprimir o bilhete
+        // chamar funcao que imprime bilhetes que recebe o vetor de Bilhetes e a posicao atual daquele bilhete
+        ImprimirBilhetes(vBilhetes, i);
+
+        cont_vBilhetes++;// indica o tamanho do vetor, pois toda a vez que se adiciona um bilhete, o vetor aumenta + 1
+    
+    printf("\nDigite [1] para continuar reservando bilhetes e [0] para voltar ao Menu Principal: ");
+    scanf("%d", &continuar);
+    printf("\n");
+    }while(continuar == 1);
+    if(continuar != 1){
+        // para que quando o usario quiser voltar ao menu, mas nao colocar 0, esta linha assegura de que continuar == 0
+        continuar = 0;
     }
-    // agora, head aponta para o nó em que está o filme escolhido, ou seja, tenho acesso ao filme escolhido + suas variaveis
-    // fazer uma copia das variaveis de Filmes para aquele bilhete
-    strcpy(vBilhetes[i].cptitulo_filme, head->titulo_filme);
-    strcpy(vBilhetes[i].cpdata, head->data);
-    strcpy(vBilhetes[i].cphorario, head->horario);
-    vBilhetes[i].preco = head->valor_filme + 10.0;
-
-    // [3] imprimir o bilhete
-    // chamar funcao que imprime bilhetes que recebe o vetor de Bilhetes e a posicao atual daquele bilhete
-    ImprimirBilhetes(vBilhetes, i);
-
-    cont_vBilhetes++;// indica o tamanho do vetor, pois toda a vez que se adiciona um bilhete, o vetor aumenta + 1
 }
 
 void Pesquisar(BILHETES *vBilhetes){
-    // [1] receber o codigo do bilhete que sera pesquisado
-    printf("Informe o codigo do bilhete: ");
-    int cod_bilhete_x;
-    scanf("%d", &cod_bilhete_x);
+    do{
+        // [1] receber o codigo do bilhete que sera pesquisado
+        printf("Informe o codigo do bilhete: ");
+        int cod_bilhete_x;
+        scanf("%d", &cod_bilhete_x);
 
-    // [2] varrer o Vetor de Bilhetes a procura do codigo do bilhete
-    int i;
-    int aux = 0;
-    for(i = 0; i < cont_vBilhetes; i++){
-        // se o cod desejado foi encontrado, imprimir o bilhete
-        if(vBilhetes[i].cod_bilhete == cod_bilhete_x){
-            ImprimirBilhetes(vBilhetes, i);
-            aux = 1;
+        // [2] varrer o Vetor de Bilhetes a procura do codigo do bilhete
+        int i;
+        int aux = 0;
+        for(i = 0; i < cont_vBilhetes; i++){
+            // se o cod desejado foi encontrado, imprimir o bilhete
+            if(vBilhetes[i].cod_bilhete == cod_bilhete_x){
+                ImprimirBilhetes(vBilhetes, i);
+                aux = 1;
+            }
         }
+        if(aux != 1) printf("Nenhum bilhete foi encontrado.");
+    
+    printf("\nDigite [1] para pesquisar novamente e [0] para voltar ao Menu Principal: ");
+    scanf("%d", &continuar);
+    printf("\n");
+    }while(continuar == 1);
+    if(continuar != 1){
+        // para que quando o usario quiser voltar ao menu, mas nao colocar 0, esta linha assegura de que continuar == 0
+        continuar = 0;
     }
-    if(aux != 1) printf("Nenhum bilhete foi encontrado.");
 }
 
 // funcao que insere novos nos se a lista Filmes esta vazia/nao vazia
 void Inserir(FILMES **head){
-    FILMES *temp = (FILMES*)malloc(sizeof(FILMES));
+    do{
+        FILMES *temp = (FILMES*)malloc(sizeof(FILMES));
 
-    // popular lista
-    temp->cod_filme = auto_cod_filme; 
-    auto_cod_filme++;
-    printf("Digite o titulo do filme: ");
-    scanf("%s", temp->titulo_filme);
-    printf("Digite o genero do filme: ");
-    scanf("%s", temp->genero);
-    printf("Digite o formato do filme: ");
-    scanf("%s", temp->formato);
-    printf("Digite a data do filme (dd-mm-aaaa): ");
-    scanf("%s", temp->data);
-    printf("Digite o horario do filme (hh:mm): ");
-    scanf("%s", temp->horario);
-    printf("Digite o valor do filme: ");
-    scanf("%f", &temp->valor_filme);
+        // popular lista
+        temp->cod_filme = auto_cod_filme; 
+        auto_cod_filme++;
+        printf("Digite o titulo do filme: ");
+        scanf("%s", temp->titulo_filme);
+        printf("Digite o genero do filme: ");
+        scanf("%s", temp->genero);
+        printf("Digite o formato do filme: ");
+        scanf("%s", temp->formato);
+        printf("Digite a data do filme (dd-mm-aaaa): ");
+        scanf("%s", temp->data);
+        printf("Digite o horario do filme (hh:mm): ");
+        scanf("%s", temp->horario);
+        printf("Digite o valor do filme: ");
+        scanf("%f", &temp->valor_filme);
 
-    // add novo no, se a lista estiver fazia
-    if(*head == NULL){
-        temp->prox = NULL;
-        *head = temp;
-    }else{
-        // se a lista nao estiver vazia, ir ate o final da lista
-        FILMES *tempTrav = *head;
-        while(tempTrav->prox != NULL){
-            tempTrav = tempTrav->prox;
+        // add novo no, se a lista estiver fazia
+        if(*head == NULL){
+            temp->prox = NULL;
+            *head = temp;
+        }else{
+            // se a lista nao estiver vazia, ir ate o final da lista
+            FILMES *tempTrav = *head;
+            while(tempTrav->prox != NULL){
+                tempTrav = tempTrav->prox;
+            }
+            // chegando no final, ajustar
+            tempTrav->prox = temp;
+            temp->prox = NULL;
         }
-        // chegando no final, ajustar
-        tempTrav->prox = temp;
-        temp->prox = NULL;
+    
+    printf("\nDigite [1] para continuar adicionando filmes e [0] para voltar ao Menu Principal: ");
+    scanf("%d", &continuar);
+    printf("\n");
+    }while(continuar == 1);
+    if(continuar != 1){
+        // para que quando o usario quiser voltar ao menu, mas nao colocar 0, esta linha assegura de que continuar == 0
+        continuar = 0;
     }
 }
 
 // funcao que edita lista de Filmes
 void Editar(FILMES *head){
-    // receber do usuario o codigo a ser deletado
-    printf("Informe o codigo do filme que deseja editar: ");
-    int cod_filme;// cod do filme a ser editado
-    scanf("%d", &cod_filme);
+    do{
+        // receber do usuario o codigo a ser deletado
+        printf("Informe o codigo do filme que deseja editar: ");
+        int cod_filme;// cod do filme a ser editado
+        scanf("%d", &cod_filme);
 
-    // percorrer a lista e encontrar o codigo solicitado
-    FILMES *tempTrav = head;
-    while((tempTrav->prox != NULL) && (tempTrav->cod_filme != cod_filme)){
-        tempTrav = tempTrav->prox;
+        // percorrer a lista e encontrar o codigo solicitado
+        FILMES *tempTrav = head;
+        while((tempTrav->prox != NULL) && (tempTrav->cod_filme != cod_filme)){
+            tempTrav = tempTrav->prox;
+        }
+        // agora tempTrav esta na posicao "final" i.e. posicao logo antes do novo elemento
+        // editar o filme desejado
+        printf("Digite o titulo do filme: ");
+        scanf("%s", tempTrav->titulo_filme);
+        printf("Digite o genero do filme: ");
+        scanf("%s", tempTrav->genero);
+        printf("Digite o formato do filme: ");
+        scanf("%s", tempTrav->formato);
+        printf("Digite a data do filme (dd-mm-aaaa): ");
+        scanf("%s", tempTrav->data);
+        printf("Digite o horario do filme (hh:mm): ");
+        scanf("%s", tempTrav->horario);
+        printf("Digite o valor do filme: ");
+        scanf("%f", &tempTrav->valor_filme);
+    
+    printf("\nDigite [1] para editar mais filmes e [0] para voltar ao Menu Principal: ");
+    scanf("%d", &continuar);
+    printf("\n");
+    }while(continuar == 1);
+    if(continuar != 1){
+        // para que quando o usario quiser voltar ao menu, mas nao colocar 0, esta linha assegura de que continuar == 0
+        continuar = 0;
     }
-    // agora tempTrav esta na posicao "final" i.e. posicao logo antes do novo elemento
-    // editar o filme desejado
-    printf("Digite o titulo do filme: ");
-    scanf("%s", tempTrav->titulo_filme);
-    printf("Digite o genero do filme: ");
-    scanf("%s", tempTrav->genero);
-    printf("Digite o formato do filme: ");
-    scanf("%s", tempTrav->formato);
-    printf("Digite a data do filme (dd-mm-aaaa): ");
-    scanf("%s", tempTrav->data);
-    printf("Digite o horario do filme (hh:mm): ");
-    scanf("%s", tempTrav->horario);
-    printf("Digite o valor do filme: ");
-    scanf("%f", &tempTrav->valor_filme);
 }
 
 // funcao que apaga um elemento da lista de Filmes
 // apaga na posicao n == cod_filme
 void Deletar(FILMES **head){
-    // receber do usuario o codigo do gilme a ser apagado
-    printf("Informe o codigo do filme que sera apagado: ");
-    // o que eh cod para o usuario, eh posicao para o programa
-    int n;// == codigo/posicao do filme a ser apagado
-    scanf("%d", &n);
+    do{
+        // receber do usuario o codigo do gilme a ser apagado
+        printf("Informe o codigo do filme que sera apagado: ");
+        // o que eh cod para o usuario, eh posicao para o programa
+        int n;// == codigo/posicao do filme a ser apagado
+        scanf("%d", &n);
 
-    FILMES *temp1 = *head;
-    // apagar o no cabecalho
-    if(n == 1){
-        *head = temp1->prox;// head agora aponta par ao segundo no
-        free(temp1);
-    }else{
-        FILMES *temp2;
-        int i;
-        for(i = 0; i < n-2; i++){
-            temp2 = temp1;
-            temp1 = temp1->prox;
+        FILMES *temp1 = *head;
+        // apagar o no cabecalho
+        if(n == 1){
+            *head = temp1->prox;// head agora aponta par ao segundo no
+            free(temp1);
+        }else{
+            FILMES *temp2;
+            int i;
+            for(i = 0; i < n-2; i++){
+                temp2 = temp1;
+                temp1 = temp1->prox;
+            }
+            // agora, temp1 aponta para Nó na posicao (n-1)th
+            temp2 = temp1->prox;// nth Nó
+            temp1->prox = temp2->prox;// (n+1)th Nó
+            free(temp2);
         }
-        // agora, temp1 aponta para Nó na posicao (n-1)th
-        temp2 = temp1->prox;// nth Nó
-        temp1->prox = temp2->prox;// (n+1)th Nó
-        free(temp2);
+    
+    printf("\nDigite [1] para apagar mais filmes e [0] para voltar ao Menu Principal: ");
+    scanf("%d", &continuar);
+    printf("\n");
+    }while(continuar == 1);
+    if(continuar != 1){
+        // para que quando o usario quiser voltar ao menu, mas nao colocar 0, esta linha assegura de que continuar == 0
+        continuar = 0;
     }
 }
 
-// funcao que imprime lista de Filmes
+// funcao Iterativa que imprime lista de Filmes
 // void Imprimir(FILMES *head){
 //     while(head != NULL){
 //         printf("Codigo do filme: %d\n", head->cod_filme);
@@ -274,50 +336,56 @@ int main(){
         scanf("%d", &opMenu);
 
         switch(opMenu){
-            case 1:
+            case ORESERVAR:
                 LimpaTela();
                 printf("Reservar bilhete\n\n");
                 Imprimir(head_filmes);
                 Reservar(vBilhetes, tam_vet, head_filmes);
             break;
-            case 2:
+            case OPESQUISAR:
                 LimpaTela();
                 printf("Pesquisar bilhete\n\n");
                 Pesquisar(vBilhetes);
             break;
-            case 3:
+            case OADICIONAR:
                 LimpaTela();
                 printf("Adicionar novo filme\n\n");
                 Inserir(&head_filmes);   
             break;
-            case 4:
+            case OEDITAR:
                 LimpaTela();
                 printf("Editar filme\n\n");
                 Imprimir(head_filmes);
                 Editar(head_filmes);
             break;
-            case 5:
+            case ODELETAR:
                 LimpaTela();
                 printf("Deletar filme\n\n");
                 Imprimir(head_filmes);
                 Deletar(&head_filmes);
             break;
-            case 6:
+            case OMOSTRAR:
                 LimpaTela();
                 printf("Mostrar lista de filmes\n\n");
                 Imprimir(head_filmes);
+                continuar = 1; //recebe 1 pois eu ja sei que quando eu terminar de mostrar toda a lista de filmes eu quero continuar (voltar) para o Menu
             break;
-            case 7:
+            case OSAIR:
                 printf("Saindo do programa...\n");
             break;
             default:
                 printf("Opcao invalida!");
         }
-    if(opMenu != 7){
-        printf("\nDigite 1 para voltar ao Menu e 0 para Sair: ");
-        scanf("%d", &respMenu);
+
+    if(continuar == 0){// indica que eu quero voltar direto para o Menu
+        respMenu = 1;// entao, respMenu == 1, que quer dizer que eu quero voltar para o menu
+    } else{// continuar == 1, é para quando a funcao for terminada, ela NAO volte para o menu e pergunte se o usuario gostaria de sair do programa
+        if(opMenu != OSAIR){
+            printf("\nDigite [1] para voltar ao Menu e [0] para Sair do programa: ");
+            scanf("%d", &respMenu);
+        }
     }
-    }while((respMenu == 1) && (opMenu != 7));
+    }while((respMenu == 1) && (opMenu != OSAIR));
     
     free(head_filmes);
     free(vBilhetes);
