@@ -1,6 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+// definicao de macros para as strings do programa
+#define TAM_TITULOFILME 31
+#define TAM_GENERO 16
+#define TAM_FORMATO 3
+#define TAM_DATA 11
+#define TAM_HORARIO 6
+#define TAM_RG 15//14 max caracteres + 1 para '\n' 566.784.287-68
+#define TAM_NOMECLIENTE 25
+// macro para identificar se o programa esta rodando em plataforma Windows ou Unix
 #if defined (_WIN32) || defined(_WIN64)
     int isWindows = 1;
 	#else
@@ -11,25 +20,25 @@
 
 typedef struct FILMES{
     int cod_filme;
-    char titulo_filme[15];
-    char genero[15];
-    char formato[15];
-    char data[15];
-    char horario[15];
+    char titulo_filme[TAM_TITULOFILME];
+    char genero[TAM_GENERO];
+    char formato[TAM_FORMATO];
+    char data[TAM_DATA];
+    char horario[TAM_HORARIO];
     float valor_filme;
     struct FILMES *prox;
 } FILMES;
 
 typedef struct BILHETES{
     int cod_bilhete;
-    char nome_cliente[15];
-    char rg[15];
+    char nome_cliente[TAM_NOMECLIENTE];
+    char rg[TAM_RG];
     int poltrona;// só para dar continuacao ao programa por enquanto
     float preco;
     int cpcod_filme;// armazena uma copia do cod do filme
-    char cptitulo_filme[15];// armazena uma copia do titulo do filme
-    char cpdata[15];// armazena uma copia da data do filme
-    char cphorario[15];// armazena uma copia do horario do filme
+    char cptitulo_filme[TAM_TITULOFILME];// armazena uma copia do titulo do filme
+    char cpdata[TAM_DATA];// armazena uma copia da data do filme
+    char cphorario[TAM_HORARIO];// armazena uma copia do horario do filme
 } BILHETES;
 
 int auto_cod_filme = 1;// global, gera codigo filme automaticamente
@@ -138,7 +147,7 @@ void Inserir(FILMES **head){
     scanf("%s", temp->formato);
     printf("Digite a data do filme (dd-mm-aaaa): ");
     scanf("%s", temp->data);
-    printf("Digite o horario do filme: ");
+    printf("Digite o horario do filme (hh:mm): ");
     scanf("%s", temp->horario);
     printf("Digite o valor do filme: ");
     scanf("%f", &temp->valor_filme);
@@ -176,7 +185,7 @@ void Editar(FILMES *head, int cod_filme){
     scanf("%s", tempTrav->formato);
     printf("Digite a data do filme (dd-mm-aaaa): ");
     scanf("%s", tempTrav->data);
-    printf("Digite o horario do filme: ");
+    printf("Digite o horario do filme (hh:mm): ");
     scanf("%s", tempTrav->horario);
     printf("Digite o valor do filme: ");
     scanf("%f", &tempTrav->valor_filme);
