@@ -169,7 +169,12 @@ void Inserir(FILMES **head){
 }
 
 // funcao que edita lista de Filmes
-void Editar(FILMES *head, int cod_filme){
+void Editar(FILMES *head){
+    // receber do usuario o codigo a ser deletado
+    printf("Informe o codigo do filme que deseja editar: ");
+    int cod_filme;// cod do filme a ser editado
+    scanf("%d", &cod_filme);
+
     // percorrer a lista e encontrar o codigo solicitado
     FILMES *tempTrav = head;
     while((tempTrav->prox != NULL) && (tempTrav->cod_filme != cod_filme)){
@@ -193,7 +198,13 @@ void Editar(FILMES *head, int cod_filme){
 
 // funcao que apaga um elemento da lista de Filmes
 // apaga na posicao n == cod_filme
-void Deletar(FILMES **head, int n){
+void Deletar(FILMES **head){
+    // receber do usuario o codigo do gilme a ser apagado
+    printf("Informe o codigo do filme que sera apagado: ");
+    // o que eh cod para o usuario, eh posicao para o programa
+    int n;// == codigo/posicao do filme a ser apagado
+    scanf("%d", &n);
+
     FILMES *temp1 = *head;
     // apagar o no cabecalho
     if(n == 1){
@@ -283,20 +294,13 @@ int main(){
                 LimpaTela();
                 printf("Editar filme\n\n");
                 Imprimir(head_filmes);
-                printf("Informe o codigo do filme que deseja editar: ");
-                int editar_cod_filme;// cod do filme a ser editado
-                scanf("%d", &editar_cod_filme);
-                Editar(head_filmes, editar_cod_filme);
+                Editar(head_filmes);
             break;
             case 5:
                 LimpaTela();
                 printf("Deletar filme\n\n");
                 Imprimir(head_filmes);
-                printf("Informe o codigo do filme que sera apagado: ");
-                // o que eh cod para o usuario, eh posicao para o programa
-                int posicao_del;// codigo/posicao do filme a ser apagado
-                scanf("%d", &posicao_del);
-                Deletar(&head_filmes, posicao_del);
+                Deletar(&head_filmes);
             break;
             case 6:
                 LimpaTela();
