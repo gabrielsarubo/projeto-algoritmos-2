@@ -187,12 +187,14 @@ void Deletar(FILMES **head, int n){
         *head = temp1->prox;// head agora aponta par ao segundo no
         free(temp1);
     }else{
+        FILMES *temp2;
         int i;
         for(i = 0; i < n-2; i++){
+            temp2 = temp1;
             temp1 = temp1->prox;
         }
         // agora, temp1 aponta para Nó na posicao (n-1)th
-        FILMES *temp2 = temp1->prox;// nth Nó
+        temp2 = temp1->prox;// nth Nó
         temp1->prox = temp2->prox;// (n+1)th Nó
         free(temp2);
     }
