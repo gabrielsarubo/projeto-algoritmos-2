@@ -116,11 +116,7 @@ void Pesquisar(BILHETES *vBilhetes){
     for(i = 0; i < cont_vBilhetes; i++){
         // se o cod desejado foi encontrado, imprimir o bilhete
         if(vBilhetes[i].cod_bilhete == cod_bilhete_x){
-            printf("\nCodigo bilhete:  %d\n", vBilhetes[i].cod_bilhete);
-            printf("Codigo filme:    %d\n", vBilhetes[i].cpcod_filme);
-            printf("Nome cliente:    %s\n", vBilhetes[i].nome_cliente);
-            printf("RG cliente:      %s\n", vBilhetes[i].rg);
-            printf("Poltrona:        %d\n", vBilhetes[i].poltrona);
+            ImprimirBilhetes(vBilhetes, i);
             aux = 1;
         }
     }
