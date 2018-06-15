@@ -172,6 +172,14 @@ void Editar(FILMES *head, int cod_filme){
     scanf("%s", tempTrav->titulo_filme);
     printf("Digite o genero do filme: ");
     scanf("%s", tempTrav->genero);
+    printf("Digite o formato do filme: ");
+    scanf("%s", tempTrav->formato);
+    printf("Digite a data do filme (dd-mm-aaaa): ");
+    scanf("%s", tempTrav->data);
+    printf("Digite o horario do filme: ");
+    scanf("%s", tempTrav->horario);
+    printf("Digite o valor do filme: ");
+    scanf("%f", &tempTrav->valor_filme);
 }
 
 // funcao que apaga um elemento da lista de Filmes
