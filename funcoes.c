@@ -89,10 +89,6 @@ void Reservar(BILHETES *vBilhetes, int tam_vet, FILMES *head){
     scanf("%d", &continuar);
     printf("\n");
     }while(continuar == 1);
-    if(continuar != 1){
-        // para que quando o usario quiser voltar ao menu, mas nao colocar 0, esta linha assegura de que continuar == 0
-        continuar = 0;
-    }
 }
 
 void Pesquisar(BILHETES *vBilhetes){
@@ -118,10 +114,6 @@ void Pesquisar(BILHETES *vBilhetes){
     scanf("%d", &continuar);
     printf("\n");
     }while(continuar == 1);
-    if(continuar != 1){
-        // para que quando o usario quiser voltar ao menu, mas nao colocar 0, esta linha assegura de que continuar == 0
-        continuar = 0;
-    }
 }
 
 // funcao que insere novos nos se a lista Filmes esta vazia/nao vazia
@@ -164,10 +156,6 @@ void Inserir(FILMES **head){
     scanf("%d", &continuar);
     printf("\n");
     }while(continuar == 1);
-    if(continuar != 1){
-        // para que quando o usario quiser voltar ao menu, mas nao colocar 0, esta linha assegura de que continuar == 0
-        continuar = 0;
-    }
 }
 
 // funcao que edita lista de Filmes
@@ -202,10 +190,6 @@ void Editar(FILMES *head){
     scanf("%d", &continuar);
     printf("\n");
     }while(continuar == 1);
-    if(continuar != 1){
-        // para que quando o usario quiser voltar ao menu, mas nao colocar 0, esta linha assegura de que continuar == 0
-        continuar = 0;
-    }
 }
 
 // funcao que apaga um elemento da lista de Filmes
@@ -240,10 +224,6 @@ void Deletar(FILMES **head){
     scanf("%d", &continuar);
     printf("\n");
     }while(continuar == 1);
-    if(continuar != 1){
-        // para que quando o usario quiser voltar ao menu, mas nao colocar 0, esta linha assegura de que continuar == 0
-        continuar = 0;
-    }
 }
 
 // funcao Iterativa que imprime lista de Filmes

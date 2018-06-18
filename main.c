@@ -78,7 +78,7 @@ int main(){
                 printf("Opcao invalida!");
         }
 
-    if(continuar == 0){// indica que eu quero voltar direto para o Menu
+    if(continuar != 1){// continuar == 0 || continuar != 1 indica que eu quero voltar direto para o Menu
         respMenu = 1;// entao, respMenu == 1, que quer dizer que eu quero voltar para o menu
     } else{// continuar == 1, é para quando a funcao for terminada, ela NAO volte para o menu e pergunte se o usuario gostaria de sair do programa
         if(opMenu != OSAIR){
