@@ -73,9 +73,11 @@ int main(){
             break;
             case OSAIR:
                 printf("Saindo do programa...\n");
+                continuar = 1;
             break;
             default:
                 printf("Opcao invalida!");
+                continuar = 1;
         }
 
     if(continuar != 1){// continuar == 0 || continuar != 1 indica que eu quero voltar direto para o Menu
