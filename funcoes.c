@@ -67,6 +67,21 @@ int BuscaBinaria(BILHETES *vBilhetes, int busca, int *encontrou){
     return meio;// a variavel 'meio' guarda, na verdade, a posicao do vetor em que o codigo do bilhete foi encontrado
 }
 
+// funcao que busca por um ou mais bilhetes que possuem o RG informado
+void BuscaSequencial(BILHETES *vBilhetes, char *buscaRG){
+    int i;
+    int encontrou = 0;
+    for(i = 0; i < cont_vBilhetes; i++){
+        if((strcmp(vBilhetes[i].rg, buscaRG)) == 0){// usando strcmp para comparacao de strings
+            ImprimirBilhetes(vBilhetes, i);
+            encontrou = 1;
+        }
+    }
+
+    if(encontrou != 1)
+        printf("\nNenhum bilhete reservado para este RG.\n");
+}
+
 // funcao que reserva novos bilhetes no vetor Bilhetes
 void Reservar(BILHETES *vBilhetes, FILMES *head){
     do{
@@ -138,6 +153,15 @@ void Pesquisar(BILHETES *vBilhetes){
             } else{
                 printf("\nBilhete nao encontrado.\n");
             }
+        }
+
+        // [3] se o usuario escolheu por pesquisar bilhetes pelo RG do cliente
+        if(op == 2){
+            printf("\nVoce escolheu pesquisar bilhetes pelo RG do cliente. Informe o RG: ");
+            char buscaRG[TAM_RG];
+            scanf("%s", buscaRG);
+
+            BuscaSequencial(vBilhetes, buscaRG);
         }
 
     printf("\nDigite [1] para pesquisar novamente e [0] para voltar ao Menu Principal: ");
