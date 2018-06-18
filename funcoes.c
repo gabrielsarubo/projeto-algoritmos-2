@@ -43,8 +43,32 @@ void ImprimirBilhetes(BILHETES *vBilhetes, int pos){
     printf("Preco final: R$ %.2f\n", vBilhetes[pos].preco);
 }
 
+int BuscaBinaria(BILHETES *vBilhetes, int busca, int *encontrou){
+    int inicial = 0; //posicao 0
+    int meio;
+    int fim = cont_vBilhetes-1;// posicao 9, tamanho do vetor - 1
+    *encontrou = 0;// 0 = nao, 1 = sim 
+
+    while((inicial <= fim) && (*encontrou == 0)){
+        // passo 1, encontrar a posicao central do vetor
+        meio = (inicial + fim)/2;
+        // passo 2, comparar o busca que o usuario esta procurando com o valor que esta armazenado na posicao central (variavel "meio")
+        if(vBilhetes[meio].cod_bilhete == busca){
+            *encontrou = 1;
+        }
+        // passo 3, alterar o valor da variavel inicial
+        else if (busca < vBilhetes[meio].cod_bilhete){
+            fim = meio - 1;
+        } else{
+            inicial = meio + 1;
+        }
+    }
+
+    return meio;// a variavel 'meio' guarda, na verdade, a posicao do vetor em que o codigo do bilhete foi encontrado
+}
+
 // funcao que reserva novos bilhetes no vetor Bilhetes
-void Reservar(BILHETES *vBilhetes, int tam_vet, FILMES *head){
+void Reservar(BILHETES *vBilhetes, FILMES *head){
     do{
         int i = cont_vBilhetes;
         // [1] imprimir lista de filmes (operacao já feita no menu principal)
@@ -93,23 +117,29 @@ void Reservar(BILHETES *vBilhetes, int tam_vet, FILMES *head){
 
 void Pesquisar(BILHETES *vBilhetes){
     do{
-        // [1] receber o codigo do bilhete que sera pesquisado
-        printf("Informe o codigo do bilhete: ");
-        int cod_bilhete_x;
-        scanf("%d", &cod_bilhete_x);
+        // [1] escolher entre pesquisar pelo codigo, um unico bilhete, ou pelo RG, varios possiveis bilhetes que possuem aquele RG
+        printf("Escolha pelo metodo de procura, procurar bilhete por: \n");
+        printf("1) Codigo\n");// retorna um unico bilhete com aquele codigo
+        printf("2) RG do cliente\n\n");// retorna um/varios bilhetes com aquele RG
+        printf("Entre com uma das opcoes acima: ");
+        int op;
+        scanf("%d", &op);
 
-        // [2] varrer o Vetor de Bilhetes a procura do codigo do bilhete
-        int i;
-        int aux = 0;
-        for(i = 0; i < cont_vBilhetes; i++){
-            // se o cod desejado foi encontrado, imprimir o bilhete
-            if(vBilhetes[i].cod_bilhete == cod_bilhete_x){
-                ImprimirBilhetes(vBilhetes, i);
-                aux = 1;
+        // [2] se o usuario escolheu por pesquisar pelo codigo do bilhete
+        if(op == 1){
+            printf("\nVoce escolheu pesquisar pelo codigo do bilhete. Informe o codigo: ");
+            int busca, encontrou;
+            scanf("%d", &busca);
+
+            int posicao = BuscaBinaria(vBilhetes, busca, &encontrou);
+
+            if(encontrou == 1){
+                ImprimirBilhetes(vBilhetes, posicao);
+            } else{
+                printf("\nBilhete nao encontrado.\n");
             }
         }
-        if(aux != 1) printf("Nenhum bilhete foi encontrado.");
-    
+
     printf("\nDigite [1] para pesquisar novamente e [0] para voltar ao Menu Principal: ");
     scanf("%d", &continuar);
     printf("\n");

@@ -41,7 +41,7 @@ int main(){
                 LimpaTela();
                 printf("Reservar bilhete\n\n");
                 Imprimir(head_filmes);
-                Reservar(vBilhetes, tam_vet, head_filmes);
+                Reservar(vBilhetes, head_filmes);
             break;
             case OPESQUISAR:
                 LimpaTela();
