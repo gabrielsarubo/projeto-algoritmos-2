@@ -43,6 +43,22 @@ void ImprimirBilhetes(BILHETES *vBilhetes, int pos){
     printf("Preco final: R$ %.2f\n", vBilhetes[pos].preco);
 }
 
+// funcao que recebe um dado do tipo char e reconhece se ele eh um codigo ou um numero de RG
+int VerificarPesquisa(char *respPesquisa){
+    int tamString = strlen(respPesquisa);
+
+    if(tamString < 12){
+        // entao usuario digitou um codigo
+        return 1;
+    } else if((tamString >= 12) && (tamString <= 14)){
+        // entao usuario digitou um RG
+        return 2;
+    } else{
+        // entao usuario nao digitou nem codigo nem RG
+        return 0;
+    }
+}
+
 int BuscaBinaria(BILHETES *vBilhetes, int busca, int *encontrou){
     int inicial = 0; //posicao 0
     int meio;
@@ -132,19 +148,16 @@ void Reservar(BILHETES *vBilhetes, FILMES *head){
 
 void Pesquisar(BILHETES *vBilhetes){
     do{
-        // [1] escolher entre pesquisar pelo codigo, um unico bilhete, ou pelo RG, varios possiveis bilhetes que possuem aquele RG
-        printf("Escolha pelo metodo de procura, procurar bilhete por: \n");
-        printf("1) Codigo\n");// retorna um unico bilhete com aquele codigo
-        printf("2) RG do cliente\n\n");// retorna um/varios bilhetes com aquele RG
-        printf("Entre com uma das opcoes acima: ");
-        int op;
-        scanf("%d", &op);
+        printf("Entre com o codigo do bilhete ou RG do cliente: ");
+        char respPesquisa[TAM_RG];
+        scanf("%s", respPesquisa);
 
-        // [2] se o usuario escolheu por pesquisar pelo codigo do bilhete
-        if(op == 1){
-            printf("\nVoce escolheu pesquisar pelo codigo do bilhete. Informe o codigo: ");
-            int busca, encontrou;
-            scanf("%d", &busca);
+        int opPesquisa = VerificarPesquisa(respPesquisa);
+
+        if(opPesquisa == 1){
+            printf("\nVoce escolheu pesquisar pelo codigo do bilhete.\n");
+            int busca = atoi(respPesquisa);
+            int encontrou;
 
             int posicao = BuscaBinaria(vBilhetes, busca, &encontrou);
 
@@ -153,15 +166,12 @@ void Pesquisar(BILHETES *vBilhetes){
             } else{
                 printf("\nBilhete nao encontrado.\n");
             }
-        }
+        } else if(opPesquisa == 2){
+            printf("\nVoce escolheu pesquisar bilhetes pelo RG do cliente\n");
 
-        // [3] se o usuario escolheu por pesquisar bilhetes pelo RG do cliente
-        if(op == 2){
-            printf("\nVoce escolheu pesquisar bilhetes pelo RG do cliente. Informe o RG: ");
-            char buscaRG[TAM_RG];
-            scanf("%s", buscaRG);
-
-            BuscaSequencial(vBilhetes, buscaRG);
+            BuscaSequencial(vBilhetes, respPesquisa);
+        } else{
+            printf("Codigo ou RG invalido.\n");
         }
 
     printf("\nDigite [1] para pesquisar novamente e [0] para voltar ao Menu Principal: ");

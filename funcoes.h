@@ -4,6 +4,7 @@
 // PROTOTIPACAO/DECLARACOES DAS FUNCOES
 void LimpaTela();
 void ImprimirBilhetes(BILHETES *vBilhetes, int pos);
+int VerificarPesquisa(char *respPesquisa);
 int BuscaBinaria(BILHETES *vBilhetes, int busca, int *encontrou);
 void BuscaSequencial(BILHETES *vBilhetes, char *buscaRG);
 void Reservar(BILHETES *vBilhetes, FILMES *head);
