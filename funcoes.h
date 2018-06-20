@@ -13,6 +13,7 @@ void Pesquisar(BILHETES *vBilhetes);
 void Inserir(FILMES **head);
 void Editar(FILMES *head);
 void Deletar(FILMES **head);
+void ImprimirRecursivo(FILMES *head);
 void Imprimir(FILMES *head);
 
 #endif

@@ -302,20 +302,24 @@ void Deletar(FILMES **head){
 //     }
 // }
 
-// funcao Recursiva que imprime lista de Filmes
-void Imprimir(FILMES *head){
+// funcao Recursiva que realiza a pesquisa e mostra todos os filmes
+void ImprimirRecursivo(FILMES *head){
     // sair da condicao
     if(head == NULL){
         return;
     }   
     // primeio, imprimir os valores do nó
-    printf("Codigo do filme: %d\n", head->cod_filme);
-    printf("Titulo do filme: %s\n", head->titulo_filme);
-    printf("Genero do filme: %s\n", head->genero);
-    printf("Formato do filme: %s\n", head->formato);
-    printf("Data do filme: %s\n", head->data);
-    printf("Horario do filme: %s\n", head->horario);
-    printf("Valor do filme: R$ %.2f\n\n", head->valor_filme);
+    printf("| %-8d | %-12s | %-12s | %-8s | %-10s | %-8s | R$ %-6.2f |\n", head->cod_filme, head->titulo_filme, head->genero, head->formato, head->data, head->horario, head->valor_filme);
     // chamada recursiva 
-    Imprimir(head->prox);
+    ImprimirRecursivo(head->prox);
+}
+
+// funcao que imprimi a lista de filmes
+void Imprimir(FILMES *head){
+    printf("-----------------------------------------------------------------------------------------\n");
+    printf("| %-8s | %-12s | %-12s | %-8s | %-10s | %-8s | %-9s |\n", "Codigo", "Titulo", "Genero", "Formato", "Data", "Horario", "Valor");
+    printf("-----------------------------------------------------------------------------------------\n");
+    // fazer chamada da funcao que realiza a pesquisa e mostra todos os filmes
+    ImprimirRecursivo(head);
+    printf("-----------------------------------------------------------------------------------------\n");
 }
