@@ -17,6 +17,7 @@ extern int auto_cod_filme;
 extern int auto_cod_bilhete;
 extern int cont_vBilhetes;
 extern int continuar;
+extern int tam_vBilhetes;
 
 typedef struct FILMES{
     int cod_filme;

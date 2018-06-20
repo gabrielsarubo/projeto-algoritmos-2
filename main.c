@@ -19,8 +19,8 @@ int main(){
 
     // criar vetor de Bilhetes
 	BILHETES *vBilhetes;
-    int tam_vet = 5;
-    vBilhetes = malloc(tam_vet * sizeof(BILHETES));
+    tam_vBilhetes = 1;
+    vBilhetes = malloc(tam_vBilhetes * sizeof(BILHETES));
 
     int opMenu, respMenu;
     do{
@@ -41,7 +41,9 @@ int main(){
                 LimpaTela();
                 printf("Reservar bilhete\n\n");
                 Imprimir(head_filmes);
+                Realocar(&vBilhetes);
                 Reservar(vBilhetes, head_filmes);
+                continuar = 1; //recebe 1 pois eu ja sei que quando eu terminar de mostrar toda a lista de filmes eu quero continuar (voltar) para o Menu
             break;
             case OPESQUISAR:
                 LimpaTela();
@@ -69,7 +71,7 @@ int main(){
                 LimpaTela();
                 printf("Mostrar lista de filmes\n\n");
                 Imprimir(head_filmes);
-                continuar = 1; //recebe 1 pois eu ja sei que quando eu terminar de mostrar toda a lista de filmes eu quero continuar (voltar) para o Menu
+                continuar = 1;
             break;
             case OSAIR:
                 printf("Saindo do programa...\n");

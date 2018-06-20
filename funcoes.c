@@ -17,8 +17,9 @@ int auto_cod_filme = 1;// global, gera codigo filme automaticamente
 int auto_cod_bilhete = 1;// global, gera codigo bilhete automaticamente
 // variavel global que conta o index em que o vetor bilhetes esta, para que na hora de add um novo bilhete:
 // se nunca foi adicionado, entao ele vale 1 | se ja foi adicionado, entao ele vale n
-int cont_vBilhetes = 0;// conta o tamanho do vetor bilhetes
+int cont_vBilhetes = 0;// conta onde o a variavel 'i' em Reservar() deve estar quando for add um novo bilhete
 int continuar = 0;// continuar se inicia como falso idicando que nao a acao nao sera continuada dentro da funcao
+int tam_vBilhetes = 0;// tamanho atual do vBilhetes
 
 void LimpaTela(){
 	if (isWindows == 1){
@@ -28,6 +29,15 @@ void LimpaTela(){
 		//limpa tela em sistemas baseados em Unix
 		system("clear"); 
 	}
+}
+
+// funcao que realoca o vetor bilhetes toda a vez que o usuario reservar um novo bilhete
+void Realocar(BILHETES **vBilhetes){
+    int ext_vBilhetes = tam_vBilhetes + 1;// ext_vBilhetes eh o novo tamanho que o vBilhetes vai ter
+    // printf("tam_vBilhetes: %d\n", tam_vBilhetes); TESTES
+    // printf("ext_vBilhetes: %d\n", ext_vBilhetes); TESTES
+    *vBilhetes = realloc(*vBilhetes, ext_vBilhetes * sizeof(BILHETES));// fazer a realocacao
+    tam_vBilhetes = ext_vBilhetes;// atualizar o tamanho do vBilhetes
 }
 
 // funcao que imprime bilhetes que recebe o vetor de Bilhetes e a posicao atual daquele bilhete
@@ -100,50 +110,44 @@ void BuscaSequencial(BILHETES *vBilhetes, char *buscaRG){
 
 // funcao que reserva novos bilhetes no vetor Bilhetes
 void Reservar(BILHETES *vBilhetes, FILMES *head){
-    do{
-        int i = cont_vBilhetes;
-        // [1] imprimir lista de filmes (operacao já feita no menu principal)
-        // [2] popular bilhete com dados, entrada: teclado
-        vBilhetes[i].cod_bilhete = auto_cod_bilhete;
-        auto_cod_bilhete++;
-        printf("Informe o codigo do filme: ");
-        scanf("%d", &vBilhetes[i].cpcod_filme);
-        printf("Informe o nome do cliente: ");
-        scanf("%s", vBilhetes[i].nome_cliente);
-        printf("Informe o RG do cliente: ");
-        scanf("%s", vBilhetes[i].rg);
+    int i = cont_vBilhetes;
+    // [1] imprimir lista de filmes (operacao já feita no menu principal)
+    // [2] popular bilhete com dados, entrada: teclado
+    vBilhetes[i].cod_bilhete = auto_cod_bilhete;
+    auto_cod_bilhete++;
+    printf("Informe o codigo do filme: ");
+    scanf("%d", &vBilhetes[i].cpcod_filme);
+    printf("Informe o nome do cliente: ");
+    scanf("%s", vBilhetes[i].nome_cliente);
+    printf("Informe o RG do cliente: ");
+    scanf("%s", vBilhetes[i].rg);
 
-        // [2.1] popular bilhete com dados, receber a poltrona, entrada: teclado
-        printf("\nEscolha uma poltrona: ");
-        scanf("%d", &vBilhetes[i].poltrona);
+    // [2.1] popular bilhete com dados, receber a poltrona, entrada: teclado
+    printf("\nEscolha uma poltrona: ");
+    scanf("%d", &vBilhetes[i].poltrona);
 
-        // [2.2] popular bilhete com copias dos dados do filme, entrada: automatico
-        // para ter acesso aos dados do filme escolhido pelo usuario, precisa-se varrer a Lista Filmes
-        // entao, armazenar uma copia de cada variavel no Vetor de Bilhetes
-        // varrer a Lista Filmes
-        while(head != NULL){
-            if(vBilhetes[i].cpcod_filme == head->cod_filme){
-                break;// se o codigo do filme for encontrado na Lista Filmes, parar a procura
-            }
-            head = head->prox;
+    // [2.2] popular bilhete com copias dos dados do filme, entrada: automatico
+    // para ter acesso aos dados do filme escolhido pelo usuario, precisa-se varrer a Lista Filmes
+    // entao, armazenar uma copia de cada variavel no Vetor de Bilhetes
+    // varrer a Lista Filmes
+    while(head != NULL){
+        if(vBilhetes[i].cpcod_filme == head->cod_filme){
+            break;// se o codigo do filme for encontrado na Lista Filmes, parar a procura
         }
-        // agora, head aponta para o nó em que está o filme escolhido, ou seja, tenho acesso ao filme escolhido + suas variaveis
-        // fazer uma copia das variaveis de Filmes para aquele bilhete
-        strcpy(vBilhetes[i].cptitulo_filme, head->titulo_filme);
-        strcpy(vBilhetes[i].cpdata, head->data);
-        strcpy(vBilhetes[i].cphorario, head->horario);
-        vBilhetes[i].preco = head->valor_filme + 10.0;
+        head = head->prox;
+    }
+    // agora, head aponta para o nó em que está o filme escolhido, ou seja, tenho acesso ao filme escolhido + suas variaveis
+    // fazer uma copia das variaveis de Filmes para aquele bilhete
+    strcpy(vBilhetes[i].cptitulo_filme, head->titulo_filme);
+    strcpy(vBilhetes[i].cpdata, head->data);
+    strcpy(vBilhetes[i].cphorario, head->horario);
+    vBilhetes[i].preco = head->valor_filme + 10.0;
 
-        // [3] imprimir o bilhete
-        // chamar funcao que imprime bilhetes que recebe o vetor de Bilhetes e a posicao atual daquele bilhete
-        ImprimirBilhetes(vBilhetes, i);
+    // [3] imprimir o bilhete
+    // chamar funcao que imprime bilhetes que recebe o vetor de Bilhetes e a posicao atual daquele bilhete
+    ImprimirBilhetes(vBilhetes, i);
 
-        cont_vBilhetes++;// indica o tamanho do vetor, pois toda a vez que se adiciona um bilhete, o vetor aumenta + 1
-    
-    printf("\nDigite [1] para continuar reservando bilhetes e [0] para voltar ao Menu Principal: ");
-    scanf("%d", &continuar);
-    printf("\n");
-    }while(continuar == 1);
+    cont_vBilhetes++;// indica o tamanho do vetor, pois toda a vez que se adiciona um bilhete, o vetor aumenta + 1
 }
 
 void Pesquisar(BILHETES *vBilhetes){

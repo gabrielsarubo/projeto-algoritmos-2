@@ -3,6 +3,7 @@
 
 // PROTOTIPACAO/DECLARACOES DAS FUNCOES
 void LimpaTela();
+void Realocar(BILHETES **vBilhetes);
 void ImprimirBilhetes(BILHETES *vBilhetes, int pos);
 int VerificarPesquisa(char *respPesquisa);
 int BuscaBinaria(BILHETES *vBilhetes, int busca, int *encontrou);
