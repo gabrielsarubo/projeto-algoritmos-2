@@ -42,15 +42,11 @@ void Realocar(BILHETES **vBilhetes){
 
 // funcao que imprime bilhetes que recebe o vetor de Bilhetes e a posicao atual daquele bilhete
 void ImprimirBilhetes(BILHETES *vBilhetes, int pos){
-    printf("\nCodigo do bilhete: %d\n", vBilhetes[pos].cod_bilhete);
-    printf("Codigo do filme: %d\n\n", vBilhetes[pos].cpcod_filme);
-    printf("Nome do cliente: %s\n", vBilhetes[pos].nome_cliente);
-    printf("RG do cliente: %s\n\n", vBilhetes[pos].rg);
-    printf("Titulo do filme: %s\n", vBilhetes[pos].cptitulo_filme);    
-    printf("Poltrona: %d\n", vBilhetes[pos].poltrona);
-    printf("Data do filme: %s\n", vBilhetes[pos].cpdata);
-    printf("Horario do filme: %s\n\n", vBilhetes[pos].cphorario);
-    printf("Preco final: R$ %.2f\n", vBilhetes[pos].preco);
+    printf("\n------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("| %-10s | %-10s | %-12s | %-15s | %-12s | %-10s | %-12s | %-8s | %-9s |\n", "Cod Bil", "Cod Film", "Cliente", "RG", "Filme", "Poltrona", "Data", "Horario", "Preco");
+    printf("------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("| %-10d | %-10d | %-12s | %-15s | %-12s | %-10d | %-12s | %-8s | R$ %-6.2f |\n", vBilhetes[pos].cod_bilhete, vBilhetes[pos].cpcod_filme, vBilhetes[pos].nome_cliente, vBilhetes[pos].rg, vBilhetes[pos].cptitulo_filme, vBilhetes[pos].poltrona, vBilhetes[pos].cpdata, vBilhetes[pos].cphorario, vBilhetes[pos].preco);
+    printf("------------------------------------------------------------------------------------------------------------------------------\n");
 }
 
 // funcao que recebe um dado do tipo char e reconhece se ele eh um codigo ou um numero de RG
@@ -144,6 +140,10 @@ void Reservar(BILHETES *vBilhetes, FILMES *head){
     vBilhetes[i].preco = head->valor_filme + 10.0;
 
     // [3] imprimir o bilhete
+    LimpaTela();
+    printf("RESERVAR BILHETE\n\n");
+    printf("# Compra realizada com sucesso!\n\n");
+    printf("# Imprimindo bilhete...\n");
     // chamar funcao que imprime bilhetes que recebe o vetor de Bilhetes e a posicao atual daquele bilhete
     ImprimirBilhetes(vBilhetes, i);
 
@@ -321,5 +321,5 @@ void Imprimir(FILMES *head){
     printf("-----------------------------------------------------------------------------------------\n");
     // fazer chamada da funcao que realiza a pesquisa e mostra todos os filmes
     ImprimirRecursivo(head);
-    printf("-----------------------------------------------------------------------------------------\n");
+    printf("-----------------------------------------------------------------------------------------\n\n");
 }

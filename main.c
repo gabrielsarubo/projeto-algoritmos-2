@@ -25,7 +25,7 @@ int main(){
     int opMenu, respMenu;
     do{
         LimpaTela();
-        printf("Menu Principal\n\n");
+        printf("MENU PRINCIPAL\n\n");
         printf("1) Reservar bilhete\n");
         printf("2) Pesquisar bilhete\n");
         printf("3) Adicionar novo filme\n");
@@ -39,7 +39,7 @@ int main(){
         switch(opMenu){
             case ORESERVAR:
                 LimpaTela();
-                printf("Reservar bilhete\n\n");
+                printf("RESERVAR BILHETE\n\n");
                 Imprimir(head_filmes);
                 Realocar(&vBilhetes);
                 Reservar(vBilhetes, head_filmes);
@@ -47,29 +47,29 @@ int main(){
             break;
             case OPESQUISAR:
                 LimpaTela();
-                printf("Pesquisar bilhete\n\n");
+                printf("PESQUISAR BILHETE\n\n");
                 Pesquisar(vBilhetes);
             break;
             case OADICIONAR:
                 LimpaTela();
-                printf("Adicionar novo filme\n\n");
+                printf("ADICIONAR FILME\n\n");
                 Inserir(&head_filmes);   
             break;
             case OEDITAR:
                 LimpaTela();
-                printf("Editar filme\n\n");
+                printf("EDITAR FILME\n\n");
                 Imprimir(head_filmes);
                 Editar(head_filmes);
             break;
             case ODELETAR:
                 LimpaTela();
-                printf("Deletar filme\n\n");
+                printf("DELETAR FILME\n\n");
                 Imprimir(head_filmes);
                 Deletar(&head_filmes);
             break;
             case OMOSTRAR:
                 LimpaTela();
-                printf("Mostrar lista de filmes\n\n");
+                printf("MOSTRAR FILMES\n\n");
                 Imprimir(head_filmes);
                 continuar = 1;
             break;
